@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import path from 'path';
 import { writeFile, mkdir } from 'fs/promises';
 
@@ -21,7 +21,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const content = formData.get('content') as string;
     const file = formData.get('file') as File | null;
 
-    // @ts-ignore
+    // @ts-expect-error
     const userId = session.user.id;
 
     if (!content) {

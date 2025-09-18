@@ -129,7 +129,7 @@ export default function GoalDetailPage() {
     return <p>Loading...</p>;
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   const isInstructor = session?.user?.role === 'INSTRUCTOR';
 
   const today = new Date();
@@ -230,7 +230,7 @@ export default function GoalDetailPage() {
                   {sub.fileUrl && <div><a href={sub.fileUrl} target="_blank" rel="noopener noreferrer">View Uploaded File</a></div>}
                 </div>
                 {goal.status === 'ACTIVE' && sub.status === 'PENDING' && !editingSubmissionId && isTodaysSubmission && (
-                  <button className="btn btn-sm btn-info float-end animate__animated animate__pulse animate__infinite" onClick={() => handleEditSubmission(sub)}><FaEdit className="me-2" /> Edit Today's Submission</button>
+                  <button className="btn btn-sm btn-info float-end animate__animated animate__pulse animate__infinite" onClick={() => handleEditSubmission(sub)}><FaEdit className="me-2" /> Edit Today&apos;s Submission</button>
                 )}
                 <span className={`badge bg-${sub.status === 'APPROVED' ? 'success' : sub.status === 'REJECTED' ? 'danger' : 'warning'}`}>{sub.status}</span>
               </li>

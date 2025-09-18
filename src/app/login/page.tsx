@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      // @ts-ignore
+      // @ts-expect-error
       if (session?.user?.role === 'ADMIN') {
         router.push('/admin/dashboard');
       } else {

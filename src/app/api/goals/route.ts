@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20', // Use your desired API version
 });
 
-export async function GET(request: Request) {
+export async function GET() {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    // @ts-ignore
+    // @ts-expect-error
     const userId = session.user.id;
     const goals = await prisma.goal.findMany({
       where: { userId },
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST() {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
   try {
     const { title, description, durationDays, stakeAmount, stripeToken } = await request.json();
-    // @ts-ignore
+    // @ts-expect-error
     const userId = session.user.id;
 
     if (!title || !description || !durationDays || !stakeAmount || !stripeToken) {
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(newGoal, { status: 201 });
-  } catch (error: any) {
+  } catch (error: Error) {
     console.error('Error creating goal or Stripe charge:', error);
     return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
   }

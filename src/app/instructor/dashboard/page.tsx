@@ -30,7 +30,7 @@ export default function InstructorDashboardPage() {
   useEffect(() => {
     if (status === 'loading') return;
 
-    // @ts-ignore
+    // @ts-expect-error
     if (status === 'unauthenticated') {
       router.push('/login');
     } else if (session?.user?.role === 'ADMIN') {
@@ -106,7 +106,7 @@ export default function InstructorDashboardPage() {
     return <p>Loading...</p>;
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   if (session?.user?.role !== 'INSTRUCTOR') {
     return <p>Access Denied. You must be an instructor to view this page.</p>;
   }

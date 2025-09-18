@@ -9,13 +9,7 @@ import { FaPlusCircle, FaTag, FaAlignLeft, FaCalendarAlt, FaDollarSign, FaSave }
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_CLIENT_ID!);
 
-const CheckoutForm = ({ stakeAmount, onCreateGoal, setLoading, setError, loading }: {
-  stakeAmount: string;
-  onCreateGoal: (stripeToken: string) => Promise<void>;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string) => void;
-  loading: boolean;
-}) => {
+const CheckoutForm = ({ onCreateGoal, setLoading, setError, loading }: { onCreateGoal: (stripeToken: string) => Promise<void>; setLoading: (loading: boolean) => void; setError: (error: string) => void; loading: boolean; }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -78,6 +72,7 @@ const CheckoutForm = ({ stakeAmount, onCreateGoal, setLoading, setError, loading
 
 
 export default function NewGoalPage() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session, status } = useSession();
   const router = useRouter();
   const [title, setTitle] = useState('');

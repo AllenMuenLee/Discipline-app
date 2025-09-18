@@ -31,7 +31,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (status === 'loading') return;
 
-    // @ts-ignore
+    // @ts-expect-error
     if (status === 'unauthenticated' || session?.user?.role !== 'ADMIN') {
       router.push('/login');
     } else {
@@ -176,7 +176,7 @@ export default function AdminDashboardPage() {
     return <p>Loading...</p>;
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   if (session?.user?.role !== 'ADMIN') {
     return <p>Access Denied. You must be an admin to view this page.</p>;
   }

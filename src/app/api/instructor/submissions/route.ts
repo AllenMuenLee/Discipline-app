@@ -6,10 +6,10 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
+export async function GET() {
   const session = await getServerSession(authOptions);
 
-  // @ts-ignore
+  // @ts-expect-error
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }

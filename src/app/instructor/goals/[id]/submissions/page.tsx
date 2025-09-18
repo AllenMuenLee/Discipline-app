@@ -52,7 +52,7 @@ export default function InstructorGoalSubmissionsPage() {
           const errorData = await res.json();
           setError(errorData.message || 'Failed to fetch goal submissions.');
         }
-      } catch (err: any) {
+      } catch (err: Error) {
         setError(err.message || 'An error occurred while fetching goal submissions.');
       } finally {
         setLoading(false);
@@ -89,7 +89,7 @@ export default function InstructorGoalSubmissionsPage() {
         const errorData = await res.json();
         setError(errorData.message || 'Failed to update submission status.');
       }
-    } catch (err: any) {
+    } catch (err: Error) {
       setError(err.message || 'An error occurred while updating submission status.');
     } finally {
       setLoading(false);
@@ -164,7 +164,7 @@ export default function InstructorGoalSubmissionsPage() {
 
       {todaysSubmission && (
         <>
-          <h3 className="mb-3">Today's Submission</h3>
+          <h3 className="mb-3">Today&apos;s Submission</h3>
           <div className="card mb-4 shadow-sm animate__animated animate__fadeInUp">
             <div className="card-body">
               <p className="card-text">{todaysSubmission.content}</p>

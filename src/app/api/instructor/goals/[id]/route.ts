@@ -2,20 +2,20 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient, Role, GoalStatus } from '@prisma/client';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 const prisma = new PrismaClient();
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  // @ts-ignore
+  // @ts-expect-error
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
 
   try {
-    let { id } = params;
+    const { id } = params;
     // Convert id to number if your Prisma schema uses Int for goal id
     // id = parseInt(id, 10);
     const { action } = await request.json();
@@ -36,7 +36,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ message: 'Goal is not pending instructor assignment' }, { status: 400 });
     }
 
-    // @ts-ignore
+    // @ts-expect-error
     if (goal.userId === session.user.id) {
       return NextResponse.json({ message: 'You cannot instruct your own goal' }, { status: 400 });
     }
@@ -45,7 +45,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       const updatedGoal = await prisma.goal.update({
         where: { id },
         data: {
-          // @ts-ignore
+          // @ts-expect-error
           instructorId: session.user.id,
           status: GoalStatus.ASSIGNED,
         },
@@ -62,7 +62,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  // @ts-ignore
+  // @ts-expect-error
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }

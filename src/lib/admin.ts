@@ -1,6 +1,6 @@
 import { Session } from 'next-auth';
 
 export function isAdmin(session: Session | null): boolean {
-  // @ts-ignore
+  // @ts-expect-error
   return session?.user?.role === 'ADMIN';
 }
