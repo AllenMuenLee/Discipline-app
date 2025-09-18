@@ -7,7 +7,7 @@ import Stripe from 'stripe';
 
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2022-11-15', // Use your desired API version
+  apiVersion: '2025-08-27.basil', // Use your desired API version
 });
 
 export async function GET() {
