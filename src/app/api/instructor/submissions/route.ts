@@ -9,7 +9,6 @@ const prisma = new PrismaClient();
 export async function GET() {
   const session = await getServerSession(authOptions);
 
-  // @ts-expect-error
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }

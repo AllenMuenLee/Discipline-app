@@ -21,7 +21,6 @@ export async function POST(request: Request) {
     const content = formData.get('content') as string;
     const file = formData.get('file') as File | null;
 
-    // @ts-expect-error
     const userId = session.user.id;
 
     if (!goalId || !content) {

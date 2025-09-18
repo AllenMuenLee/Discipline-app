@@ -176,7 +176,7 @@ export default function AdminDashboardPage() {
     return <p>Loading...</p>;
   }
 
-  
+  // @ts-expect-error
   if (session?.user?.role !== 'ADMIN') {
     return <p>Access Denied. You must be an admin to view this page.</p>;
   }

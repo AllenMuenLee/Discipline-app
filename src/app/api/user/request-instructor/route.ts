@@ -12,7 +12,6 @@ export async function POST() {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  // @ts-expect-error
   const userId = session.user.id;
 
   try {

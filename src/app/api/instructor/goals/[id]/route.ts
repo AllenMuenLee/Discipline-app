@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  // @ts-expect-error
+
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }
@@ -36,7 +36,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ message: 'Goal is not pending instructor assignment' }, { status: 400 });
     }
 
-    // @ts-expect-error
     if (goal.userId === session.user.id) {
       return NextResponse.json({ message: 'You cannot instruct your own goal' }, { status: 400 });
     }
@@ -45,7 +44,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       const updatedGoal = await prisma.goal.update({
         where: { id },
         data: {
-          // @ts-expect-error
           instructorId: session.user.id,
           status: GoalStatus.ASSIGNED,
         },
@@ -61,8 +59,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-
-  // @ts-expect-error
+  
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
     return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
   }

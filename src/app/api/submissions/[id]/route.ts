@@ -21,7 +21,6 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const content = formData.get('content') as string;
     const file = formData.get('file') as File | null;
 
-    // @ts-expect-error
     const userId = session.user.id;
 
     if (!content) {
