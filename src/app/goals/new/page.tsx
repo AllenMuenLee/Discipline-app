@@ -186,7 +186,6 @@ export default function NewGoalPage() {
             currency: 'usd',
           } as StripeElementsOptions}>
             <CheckoutForm
-              stakeAmount={stakeAmount}
               onCreateGoal={handleCreateGoal}
               setLoading={setLoading}
               setError={setApiError}

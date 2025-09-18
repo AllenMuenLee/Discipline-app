@@ -7,7 +7,7 @@ import Stripe from 'stripe';
 
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20', // Use your desired API version
+  apiVersion: '2025-08-27.basil', // Use your desired API version
 });
 
 export async function GET() {
@@ -34,7 +34,7 @@ export async function GET() {
   }
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -87,8 +87,8 @@ export async function POST() {
     });
 
     return NextResponse.json(newGoal, { status: 201 });
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Error creating goal or Stripe charge:', error);
-    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: error instanceof Error ? error.message : 'Internal Server Error' }, { status: 500 });
   }
 }

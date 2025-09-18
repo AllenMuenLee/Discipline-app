@@ -24,7 +24,11 @@ export const authOptions: AuthOptions = {
           where: { email: credentials.email }
         });
 
-        if (user && await bcrypt.compare(credentials.password, user.password)) {
+        if (
+          user &&
+          await bcrypt.compare(credentials.password, user.password) &&
+          (user.role === "STUDENT" || user.role === "INSTRUCTOR")
+        ) {
           return { id: user.id, email: user.email, role: user.role };
         } else {
           return null;
@@ -49,7 +53,7 @@ export const authOptions: AuthOptions = {
           where: { id: token.id as string },
           select: { role: true },
         });
-        if (dbUser) {
+        if (dbUser && (dbUser.role === "STUDENT" || dbUser.role === "INSTRUCTOR")) {
           token.role = dbUser.role;
         }
       }

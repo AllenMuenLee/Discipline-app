@@ -6,7 +6,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -14,7 +14,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     
     const userId = session.user.id;
 

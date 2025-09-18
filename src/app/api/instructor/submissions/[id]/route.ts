@@ -5,7 +5,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 const prisma = new PrismaClient();
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR || !session.user.id) {
@@ -13,7 +13,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 
   try {
-    const { id: submissionId } = params;
+    const { id: submissionId } = await params;
     const { status: newStatus, reviewerComment } = await request.json();
     const instructorId = session.user.id;
 

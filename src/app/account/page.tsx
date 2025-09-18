@@ -42,8 +42,12 @@ export default function AccountPage() {
       } else {
         setError(data.message || 'Failed to submit instructor request.');
       }
-    } catch (err: Error) {
-      setError(err.message || 'An unexpected error occurred.');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'An unexpected error occurred.');
+      } else {
+        setError('An unexpected error occurred.');
+      }
     } finally {
       setLoading(false);
     }

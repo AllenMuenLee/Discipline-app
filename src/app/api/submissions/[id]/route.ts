@@ -8,7 +8,7 @@ import { writeFile, mkdir } from 'fs/promises';
 
 const prisma = new PrismaClient();
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }>}) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -16,7 +16,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const formData = await request.formData();
     const content = formData.get('content') as string;
     const file = formData.get('file') as File | null;

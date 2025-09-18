@@ -7,7 +7,7 @@ import { isAdmin } from '@/lib/admin';
 
 const prisma = new PrismaClient();
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
   if (!isAdmin(session)) {
@@ -15,7 +15,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const data = await request.json();
 
     const updatedGoal = await prisma.goal.update({
@@ -25,12 +25,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(updatedGoal, { status: 200 });
   } catch (error) {
-    console.error(`Error updating goal ${params.id}:`, error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
   if (!isAdmin(session)) {
@@ -38,7 +37,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
 
     await prisma.goal.delete({
       where: { id },
@@ -46,7 +45,6 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     return NextResponse.json({ message: 'Goal deleted successfully' }, { status: 200 });
   } catch (error) {
-    console.error(`Error deleting goal ${params.id}:`, error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

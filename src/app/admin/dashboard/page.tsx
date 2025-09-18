@@ -32,7 +32,7 @@ export default function AdminDashboardPage() {
     if (status === 'loading') return;
 
     
-    if (status === 'unauthenticated' || session?.user?.role !== 'ADMIN') {
+    if (status === 'unauthenticated') {
       router.push('/login');
     } else {
       fetchUsers();
@@ -174,10 +174,6 @@ export default function AdminDashboardPage() {
 
   if (status === 'loading') {
     return <p>Loading...</p>;
-  }
-
-  if (session?.user?.role !== 'ADMIN') {
-    return <p>Access Denied. You must be an admin to view this page.</p>;
   }
 
   return (

@@ -52,8 +52,12 @@ export default function InstructorGoalSubmissionsPage() {
           const errorData = await res.json();
           setError(errorData.message || 'Failed to fetch goal submissions.');
         }
-      } catch (err: Error) {
-        setError(err.message || 'An error occurred while fetching goal submissions.');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message || 'An error occurred while fetching goal submissions.');
+        } else {
+          setError('An error occurred while fetching goal submissions.');
+        }
       } finally {
         setLoading(false);
       }
@@ -85,12 +89,13 @@ export default function InstructorGoalSubmissionsPage() {
         setSubmissionToReject(null);
         setRejectReason('');
         await fetchGoalSubmissions();
-      } else {
-        const errorData = await res.json();
-        setError(errorData.message || 'Failed to update submission status.');
       }
-    } catch (err: Error) {
-      setError(err.message || 'An error occurred while updating submission status.');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'An error occurred while updating submission status.');
+      } else {
+        setError('An error occurred while updating submission status.');
+      }
     } finally {
       setLoading(false);
     }

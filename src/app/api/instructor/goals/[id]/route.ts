@@ -3,10 +3,14 @@ import { NextResponse } from 'next/server';
 import { PrismaClient, Role, GoalStatus } from '@prisma/client';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import Stripe from 'stripe';
 
 const prisma = new PrismaClient();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-08-27.basil', // Use your desired API version
+});
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
 
@@ -15,7 +19,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     // Convert id to number if your Prisma schema uses Int for goal id
     // id = parseInt(id, 10);
     const { action } = await request.json();
@@ -57,7 +61,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   
   if (!session || !session.user || session.user.role !== Role.INSTRUCTOR) {
@@ -65,7 +69,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const { status } = await request.json();
 
     if (!status || !['COMPLETED', 'FAILED'].includes(status)) {

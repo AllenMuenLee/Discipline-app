@@ -7,7 +7,7 @@ import { isAdmin } from '@/lib/admin';
 
 const prisma = new PrismaClient();
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
 
   if (!isAdmin(session)) {
@@ -15,7 +15,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const data = await request.json();
 
     const updatedUser = await prisma.user.update({
@@ -25,22 +25,21 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {
-    console.error(`Error updating user ${params.id}:`, error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const { id } = params;
+  const { id } = await params;
 
   try {
     await prisma.user.delete({
@@ -58,15 +57,15 @@ export async function DELETE(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const { id } = params;
+  const { id } = await params;
   const body = await request.json();
   const { name } = body;
 
