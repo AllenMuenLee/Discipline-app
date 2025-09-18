@@ -39,7 +39,7 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // @ts-expect-error
+        
         token.role = user.role;
       }
 
@@ -57,9 +57,9 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        // @ts-expect-error
+        
         session.user.id = token.id;
-        // @ts-expect-error
+        
         session.user.role = token.role;
       }
       return session;

@@ -15,7 +15,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   try {
     const { id } = params;
-    // @ts-expect-error
+    
     const userId = session.user.id;
 
     const goal = await prisma.goal.findUnique({

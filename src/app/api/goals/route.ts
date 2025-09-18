@@ -18,7 +18,7 @@ export async function GET() {
   }
 
   try {
-    // @ts-expect-error
+    
     const userId = session.user.id;
     const goals = await prisma.goal.findMany({
       where: { userId },
@@ -43,7 +43,7 @@ export async function POST() {
 
   try {
     const { title, description, durationDays, stakeAmount, stripeToken } = await request.json();
-    // @ts-expect-error
+    
     const userId = session.user.id;
 
     if (!title || !description || !durationDays || !stakeAmount || !stripeToken) {

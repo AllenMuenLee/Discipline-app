@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
   try {
     const { id } = await Promise.resolve(params);
-    // @ts-expect-error
+    
     const userId = session.user.id;
 
     const goal = await prisma.goal.findFirst({
