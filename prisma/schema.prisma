@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String            @id @default(cuid())
+  email               String            @unique
+  password            String
+  name                String?
+  role                Role              @default(STUDENT)
+  goals               Goal[]
+  submissionsReviewed DailySubmission[] @relation("Reviewer")
+  instructorGoals     Goal[]            @relation("InstructorGoals")
+  paymentsReceived    Payment[]         @relation("Recipient")
+}
+
+model Goal {
+  id            String            @id @default(cuid())
+  title         String
+  description   String
+  startDate     DateTime
+  durationDays  Int       @default(7)
+  endDate       DateTime?
+  stakeAmount   Float
+  startedAt     DateTime?         // New field to track when the goal starts
+  status        GoalStatus        @default(PENDING_INSTRUCTOR_ASSIGNMENT) // New default status
+  user          User              @relation(fields: [userId], references: [id])
+  userId        String
+  instructor    User?             @relation("InstructorGoals", fields: [instructorId], references: [id]) // New instructor relation
+  instructorId  String?
+  submissions   DailySubmission[]
+  payment       Payment[]
+}
+
+model DailySubmission {
+  id             String           @id @default(cuid())
+  submissionDate DateTime         @default(now())
+  content        String // Could be a URL to the uploaded file
+  fileUrl        String?
+  status         SubmissionStatus @default(PENDING)
+  reviewerComment String? // Add this line
+  goal           Goal             @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goalId         String
+  reviewer       User?            @relation("Reviewer", fields: [reviewerId], references: [id])
+  reviewerId     String?
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  stripeChargeId String        @unique
+  amount         Float
+  status         PaymentStatus
+  type           PaymentType
+  goal           Goal?         @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goalId         String?       @unique
+  recipient      User?         @relation("Recipient", fields: [recipientId], references: [id])
+  recipientId    String?
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum GoalStatus {
+  PENDING_INSTRUCTOR_ASSIGNMENT
+  ASSIGNED
+  ACTIVE
+  COMPLETED
+  FAILED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  HELD
+  REFUNDED
+  CAPTURED
+  PAID
+}
+
+enum PaymentType {
+  STAKE
+  THANKS
+}
