@@ -25,7 +25,7 @@ export default function DashboardPage() {
     if (status === 'unauthenticated') {
       router.push('/login');
     } else if (status === 'authenticated') {
-      // @ts-expect-error
+      
       if (session?.user?.role === 'ADMIN') {
         router.push('/admin/dashboard');
       } else {
@@ -90,7 +90,7 @@ export default function DashboardPage() {
     return <p>Loading...</p>;
   }
 
-  // @ts-expect-error
+  
   if (!session || session?.user?.role === 'ADMIN') {
     return null;
   }

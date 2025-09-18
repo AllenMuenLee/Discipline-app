@@ -129,7 +129,7 @@ export default function GoalDetailPage() {
     return <p>Loading...</p>;
   }
 
-  // @ts-expect-error
+  
   const isInstructor = session?.user?.role === 'INSTRUCTOR';
 
   const today = new Date();
